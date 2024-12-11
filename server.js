@@ -38,7 +38,7 @@ const startServer = async () => {
         global['browser'] = browser;
         // setBrowser(browser);
         app.use(express.json());
-        app.use(routes)
+        app.use('/api/igv1',routes)
 		app.listen(process.env.NODE_PORT, () => {
 			console.info(`
                 ################################################

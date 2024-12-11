@@ -8,7 +8,7 @@ class TweetImageGenerator {
         try {
             const tweetUrl = req.body?.tweetUrl;
             if(!tweetUrl) {
-              return res.status(200).json({ error: 'Tweet URL is required' });
+              return res.status(400).json({ error: 'Tweet URL is required' });
             }
             const imageBuffer = await tweetImageGenerationService.generateTweetImageService( tweetUrl);
             const filename = `dailyDrop/tweet_create_${Date.now()}.png`;
