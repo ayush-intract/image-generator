@@ -2,7 +2,7 @@
 imageName=image-generator
 containerName=image-generator
 
-cp ../setup/.env.staging ./.env.staging
+# cp ../setup/.env.staging ./.env.staging
 
 docker build -t $imageName  . -f ./staging.Dockerfile
 
