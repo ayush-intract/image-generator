@@ -13,7 +13,7 @@
 class RewindImageGenerationSerice{
 
     async generateTweetImageService(tweetUrl) {
-        const page = await browser.newPage();
+        const page = await global.browser.newPage();
         try {
             await page.goto(tweetUrl, {waitUntil: 'networkidle0'});
 

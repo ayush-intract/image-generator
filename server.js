@@ -50,19 +50,12 @@ const startServer = async () => {
         // setBrowser(browser);
         app.use(express.json());
         app.use('/api/igv1',routes)
-        initBrowser()
-        .then(() => {
-            app.listen(process.env.NODE_PORT, () => {
-                console.info(`
-                    ################################################
-                    🛡️  Server listening on port: ${process.env.NODE_PORT} 🛡️
-                    ################################################
-                `);
-            });
-        })
-        .catch(err => {
-            console.error('Failed to initialize browser:', err);
-        process.exit(1);
+        app.listen(process.env.NODE_PORT, () => {
+            console.info(`
+                ################################################
+                🛡️  Server listening on port: ${process.env.NODE_PORT} 🛡️
+                ################################################
+            `);
         });
 		
 	} catch (err) {
