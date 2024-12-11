@@ -1,9 +1,14 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const {Storage} = require('@google-cloud/storage');
-require('dotenv').config({ path: '.env.dev' });
 const routes = require('./routes/image-generate.route');
 
+
+if(process.env.NODE_ENV === 'production') {
+    require('dotenv').config({ path: '.env.production' });
+} else {
+    require('dotenv').config({ path: '.env.development' });
+}
 
 // let browserInstance = null;
 // let browser;
@@ -30,6 +35,7 @@ const startServer = async () => {
         console.log('Browser instance created');
         global['browser'] = browser;
         // setBrowser(browser);
+        app.use(express.json());
         app.use(routes)
 		app.listen(process.env.NODE_PORT, () => {
 			console.info(`

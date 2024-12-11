@@ -127,6 +127,33 @@ async function generateSingleImage(html, templateName) {
   }
 }
 
+async function generateTweetImage(tweetUrl) {
+  const page = await browser.newPage(headless=false);
+  try {
+    await page.goto(tweetUrl, {waitUntil: 'networkidle0'});
+
+    await page.setViewport({width: 1080, height: 1024});
+    // console.log(window.document.body.innerHTML);
+    const imageSize= await page.evaluate(() => {
+        return {
+            width: window.document.body.clientWidth ,
+            height: window.document.body.clientHeight
+        };
+    });
+
+    await page.setViewport({width: imageSize.width, height: imageSize.height});
+
+    const screenshot = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: imageSize.width/2+5, height: imageSize.height-90 } });
+    
+    return screenshot;
+  } catch (error) {
+    console.error('Error generating tweet image:', error);
+    return null;
+  } finally {
+    await page.close();
+  }
+}
+
 async function uploadToGCS(buffer, filename) {
   const file = bucket.file(filename);
   await file.save(buffer, {
@@ -137,8 +164,11 @@ async function uploadToGCS(buffer, filename) {
 
 app.post('/generate', async (req, res) => {
   try {
-    const count = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
+    // const count = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
     
+    // Generate all images in parallel
+    const count = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
+
     // Generate all images in parallel
     const imagePromises = Object.entries(templates).map(async ([templateName, templateFn]) => {
       const template = templateFn(count);
@@ -160,6 +190,30 @@ app.post('/generate', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+app.post('/tweet-generate', async (req, res) => {
+  try {
+    console.log(req.body);
+    const tweetUrl = req.body.tweetUrl;
+    if(!tweetUrl) {
+      return res.status(200).json({ error: 'Tweet URL is required' });
+    }
+    const imageBuffer = await generateTweetImage( tweetUrl);
+    const filename = `dailyDrop2024/tweet_create_${Date.now()}.png`;
+    const publicUrl = await uploadToGCS(imageBuffer, filename);
+    res.json({
+      success: true,
+      image: {
+        url: publicUrl
+      }
+    });
+  } catch (error) {
+    console.error('Error generating images:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Initialize browser on startup
 async function initBrowser() {
