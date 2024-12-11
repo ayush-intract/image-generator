@@ -2,5 +2,5 @@
 	"watch": ["."],
 	"ext": "js,json",
 	"ignore": ["src/**/*.spec.js"],
-	"exec": "NODE_ENV=dev nodemon --exec node ./server.js"
+	"exec": "NODE_ENV=development nodemon --exec node ./server.js"
 }
