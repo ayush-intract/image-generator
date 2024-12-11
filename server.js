@@ -23,6 +23,17 @@ if(process.env.NODE_ENV === 'production') {
 //     return browserInstance;
 //     // browserInstance = browser;
 // };
+// Initialize browser on startup
+async function initBrowser() {
+    browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox']
+    });
+    console.log('Browser instance created');
+  }
+  
+  // Initialize browser before starting the server
+  
 
 // const app = express();
 const startServer = async () => {
@@ -39,13 +50,21 @@ const startServer = async () => {
         // setBrowser(browser);
         app.use(express.json());
         app.use('/api/igv1',routes)
-		app.listen(process.env.NODE_PORT, () => {
-			console.info(`
-                ################################################
-                🛡️  Server listening on port: ${process.env.NODE_PORT} 🛡️
-                ################################################
-            `);
-		});
+        initBrowser()
+        .then(() => {
+            app.listen(process.env.NODE_PORT, () => {
+                console.info(`
+                    ################################################
+                    🛡️  Server listening on port: ${process.env.NODE_PORT} 🛡️
+                    ################################################
+                `);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to initialize browser:', err);
+        process.exit(1);
+        });
+		
 	} catch (err) {
 		console.error(err);
 	}
