@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js"
+    "dev": "npx nodemon",
+    "production": "NODE_ENV=production node server.js",
+    "staging": "NODE_ENV=staging node server.js"
   },
   "author": "Ayush Mishra",
   "license": "ISC",

@@ -1,23 +1,32 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 const {Storage} = require('@google-cloud/storage');
-require('dotenv').config({ path: '.env.dev' });
 const routes = require('./routes/image-generate.route');
 const { preview } = require('vite');
 const path = require('path');
+const browserCheckMiddleware = require('./middleware/browserCheck.middleware');
 
 
-// let browserInstance = null;
-// let browser;
+if(process.env.NODE_ENV === 'production') {
+    require('dotenv').config({ path: '.env.production' });
+} else if(process.env.NODE_ENV === 'staging') {
+    require('dotenv').config({ path: '.env.staging' });
+} else {
+    require('dotenv').config({ path: '.env.development' });
+}
 
-// const getBrowser = () => {return browserInstance;}
-// const setBrowser = (browser) => {
-//     if(!browserInstance) {
-//         browserInstance = browser;
-//     }
-//     return browserInstance;
-//     // browserInstance = browser;
-// };
+
+// Initialize browser on startup
+async function initBrowser() {
+    browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox']
+    });
+    console.log('Browser instance created');
+  }
+  
+  // Initialize browser before starting the server
+  
 
 // const app = express();
 const startServer = async () => {
@@ -31,31 +40,38 @@ const startServer = async () => {
         });
         console.log('Browser instance created');
 
-        // const previewServer = await preview({
-        //     preview: {
-        //         port: 3001,
-        //         open: false
-        //     },
-        //     build: {
-        //         outDir: path.resolve(__dirname, '../wallet-infra/dist/apps/puppeteer')
-        //     },
-        //     root: path.resolve(__dirname, '../wallet-infra/dist/apps/puppeteer'),
-        // })
+        // Start Vite preview server
+        await preview({
+            preview: {
+                port: 3001,
+                open: false
+            },
+            build: {
+                outDir: path.resolve(__dirname, './dist/apps/puppeteer')  // Update this path to where your built files are
+            },
+            root: path.resolve(__dirname, './dist/apps/puppeteer'),  // Update this path to where your built files are
+        });
+        
+        console.log(`Vite preview server started`);
 
         global['browser'] = browser;
         // setBrowser(browser);
         app.use(express.json());
-        app.use(routes)
         
-		app.listen(process.env.NODE_PORT, () => {
-			console.info(`
+        // Add the browser check middleware before the routes
+        app.use(browserCheckMiddleware);
+        
+        app.use('/api/igv1',routes)
+        app.listen(process.env.NODE_PORT, () => {
+            console.info(`
                 ################################################
                 🛡️  Server listening on port: ${process.env.NODE_PORT} 🛡️
                 ################################################
             `);
-		});
+        });
+		
 	} catch (err) {
-		console.error(err);
+		console.error('Server startup error:', err);
 	}
 };
 
@@ -71,6 +87,10 @@ const startServer = async () => {
 
 process.on('SIGINT', async () => {
     console.log('Caught SIGINT signal');
+    if (global.browser) {
+        await global.browser.close();
+        console.log('Browser closed');
+    }
     process.exit();
 });
 

@@ -1,7 +1,4 @@
-
-
-
 node_modules
 cloud.json
-.env.dev
 package-lock.json
+.env.*

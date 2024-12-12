@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+    image-generator:
+        image: image-generator # Use your specific Node.js image
+        restart: always
+        ports:
+            - 7001
+        networks:
+            - app-network
+
+    nginx:
+        image: nginx:latest # Use the latest Nginx image
+        restart: always
+        depends_on:
+            - image-generator
+        ports:
+            - '7001:7001'
+        networks:
+            - app-network
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+networks:
+    app-network:
+        driver: bridge

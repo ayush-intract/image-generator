@@ -1,25 +1,27 @@
-
 const rewindImageGenerationService = require('../services/rewindImageGeneration.service');
 
 class ImageGenerator {
     async generatorImage(req, res) {
         try {
-            const text = req.body.text;
+            const stats = req.body;
             let a = Date.now();
-            const response = await rewindImageGenerationService.generateRewindService(text);
+            // Collect promises for parallel execution
+            const promises = [];
+            for (let i = 0; i < stats.length; i++) {
+                if(["StreakLength","TotalWalletTransactionMetric","TotalGasSaved","DeveloperInfoMetric","TestnetTxnCount","MemecoinMetric","FavouriteChainMetric"].includes(stats[i].metricType)){
+                    let stat = {
+                        "cardType": stats[i].metricType,
+                        "cardData": stats[i].metricData
+                    }
+                    // Push the promise to the array
+                    promises.push(rewindImageGenerationService.generateRewindService(stat).then(r => {
+                        return { metricType: stats[i].metricType, cardUrl: r };
+                    }));
+                }
+            }
+            // Wait for all promises to resolve
+            const response = await Promise.all(promises);
             console.log('response time :: ',Date.now() - a);
-            // const count = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
-            // // Generate all images in parallel
-            // const imagePromises = Object.entries(templates).map(async ([templateName, templateFn]) => {
-            //     const template = templateFn(count);
-            //     const html = generateHTML(template);
-            //     const imageBuffer = await generateSingleImage(html, templateName);
-            //     const filename = `rewind2024/${templateName}_${Date.now()}.png`;
-            //     const publicUrl = await uploadToGCS(imageBuffer, filename);
-            //     return { templateName, publicUrl };
-            // });
-        
-            // const results = await Promise.all(imagePromises);
             
             res.json({
                 success: true,
