@@ -30,7 +30,7 @@ class RewindImageGenerationSerice{
 
             const screenshot = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: imageSize.width/2+5, height: imageSize.height-90 } });
             
-            return screenshot;
+            return {'imageBuffer':screenshot,'width': imageSize.width/2+5, 'height': imageSize.height-90};
         } catch (error) {
             console.error('Error generating tweet image:', error);
             return null;

@@ -10,13 +10,16 @@ class TweetImageGenerator {
             if(!tweetUrl) {
               return res.status(400).json({ error: 'Tweet URL is required' });
             }
-            const imageBuffer = await tweetImageGenerationService.generateTweetImageService( tweetUrl);
+            const result = await tweetImageGenerationService.generateTweetImageService( tweetUrl);
             const filename = `dailyDrop/tweet_create_${Date.now()}.png`;
-            const publicUrl = await uploadToGcs(imageBuffer, filename); 
+            let publicUrl = await uploadToGcs(result.imageBuffer, filename); 
+            publicUrl= publicUrl.replace('%2F', '/')
             res.json({
               success: true,
               image: {
-                url: publicUrl
+                url: publicUrl,
+                height: result.height,
+                width: result.width
               }
             });
           } catch (error) {
