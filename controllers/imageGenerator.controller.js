@@ -4,8 +4,10 @@ const rewindImageGenerationService = require('../services/rewindImageGeneration.
 class ImageGenerator {
     async generatorImage(req, res) {
         try {
-
-            const response = await rewindImageGenerationService.generateRewindService();
+            const text = req.body.text;
+            let a = Date.now();
+            const response = await rewindImageGenerationService.generateRewindService(text);
+            console.log('response time :: ',Date.now() - a);
             // const count = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
             // // Generate all images in parallel
             // const imagePromises = Object.entries(templates).map(async ([templateName, templateFn]) => {

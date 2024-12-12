@@ -50,7 +50,10 @@ const templates = {
 };
 
 
-const {uploadToGcs} = require('../utility/uploadToGcs.util')
+const { default: puppeteer } = require('puppeteer');
+const {uploadToGcs} = require('../utility/uploadToGcs.util');
+const { preview } = require('vite');
+const path = require('path');
 // import {uploadToGCS} from '../utility/uploadToGcs.util'
 // const {getBrowser} = require('../server')
 // const puppeteer = require('puppeteer');
@@ -65,36 +68,68 @@ class RewindImageGenerationSerice{
     async generateRewindService(data) {
         const count = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
         // Generate all images in parallel
-        const imagePromises = Object.entries(templates).map(async ([templateName, templateFn]) => {
-            const template = templateFn(count);
-            const html = this.generateHTML(template);
-            const imageBuffer = await this.generateSingleImage(html, templateName);
-            const filename = `rewind2024/${templateName}_${Date.now()}.png`;
-            const publicUrl = await uploadToGcs(imageBuffer, filename);
-            return { templateName, publicUrl };
-        });
+        const imageBuffer = await this.generateSingleImage(data);
+        const filename = `rewind2024/${'templateName'}_${Date.now()}.png`;
+        const publicUrl = await uploadToGcs(imageBuffer, filename);
+        return {
+            publicUrl
+        }
+        // const imagePromises = Object.entries(templates).map(async ([templateName, templateFn]) => {
+        //     const template = templateFn(count);
+        //     const html = this.generateHTML(template);
+        //     const imageBuffer = await this.generateSingleImage(html, templateName);
+        //     const filename = `rewind2024/${templateName}_${Date.now()}.png`;
+        //     const publicUrl = await uploadToGcs(imageBuffer, filename);
+        //     return { templateName, publicUrl };
+        // });
     
-        const results = await Promise.all(imagePromises);
-        return results;
+        // const results = await Promise.all(imagePromises);
+        // return results;
     }
 
-    async generateSingleImage(html, templateName) {
+    async generateSingleImage(data) {
         // const browser = getBrowser;
+
+        const previewServer = await preview({
+            preview: {
+                port: 3001,
+                open: false
+            },
+            build: {
+                outDir: path.resolve(__dirname, '../../wallet-infra/dist/apps/puppeteer')
+            },
+            root: path.resolve(__dirname, '../../wallet-infra/dist/apps/puppeteer'),
+        })
+
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        try {
-          await page.setViewport({
-            width: 500,
-            height: 700
-          });
-          await page.setContent(html);
-          const element = await page.$('body');
-          const screenshot = await element.screenshot({
-            type: 'png'
-          });
-          return screenshot;
-        } finally {
-          await page.close();
-        }
+        
+        await page.evaluateOnNewDocument(() => {
+          window._asmMetricType = 'TotalGasSaved',
+          window._asmMetricData = {
+            "totalGasSaved": 1112,
+            "randomText": data,
+          }
+        })
+
+        await page.goto("http://localhost:3001", {
+            waitUntil: 'networkidle0',
+        })
+
+        await page.evaluate(() => {
+             if(window.React && window.React.version) {
+                console.log("React is loaded", window.React);
+             }
+        })
+     
+        const card = await page.waitForSelector('#contrast');
+        const snap = await card.screenshot({ path: "a.png", omitBackground: true });
+        return snap;
+        
+
+        // await browser.close();
+        // await new Promise(resolve => previewServer.httpServer.close(resolve));
+        
     }
 
     generateHTML(template) {

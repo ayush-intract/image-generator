@@ -3,6 +3,8 @@ const express = require('express');
 const {Storage} = require('@google-cloud/storage');
 require('dotenv').config({ path: '.env.dev' });
 const routes = require('./routes/image-generate.route');
+const { preview } = require('vite');
+const path = require('path');
 
 
 // let browserInstance = null;
@@ -28,9 +30,23 @@ const startServer = async () => {
             args: ['--no-sandbox']
         });
         console.log('Browser instance created');
+
+        // const previewServer = await preview({
+        //     preview: {
+        //         port: 3001,
+        //         open: false
+        //     },
+        //     build: {
+        //         outDir: path.resolve(__dirname, '../wallet-infra/dist/apps/puppeteer')
+        //     },
+        //     root: path.resolve(__dirname, '../wallet-infra/dist/apps/puppeteer'),
+        // })
+
         global['browser'] = browser;
         // setBrowser(browser);
+        app.use(express.json());
         app.use(routes)
+        
 		app.listen(process.env.NODE_PORT, () => {
 			console.info(`
                 ################################################
