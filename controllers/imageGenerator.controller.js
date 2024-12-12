@@ -15,7 +15,7 @@ class ImageGenerator {
                     }
                     // Push the promise to the array
                     promises.push(rewindImageGenerationService.generateRewindService(stat).then(r => {
-                        return { metricType: stats[i].metricType, cardUrl: r };
+                        return { metricType: stats[i].metricType, cardUrl:  r.publicUrl.replace('%2F', '/') };
                     }));
                 }
             }

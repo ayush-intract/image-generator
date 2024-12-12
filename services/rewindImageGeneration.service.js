@@ -2,6 +2,7 @@ const { default: puppeteer } = require('puppeteer');
 const {uploadToGcs} = require('../utility/uploadToGcs.util');
 const { preview } = require('vite');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 
 
 class RewindImageGenerationSerice{
@@ -11,7 +12,7 @@ class RewindImageGenerationSerice{
         // Generate all images in parallel
 
         const imageBuffer = await this.generateSingleImage(data);
-        const filename = `rewind2024/${'templateName'}_${Date.now()}.png`;
+        const filename = `rewind2024/${data.cardType}_${uuidv4()}.png`;
         const publicUrl = await uploadToGcs(imageBuffer, filename);
         return {
             publicUrl
