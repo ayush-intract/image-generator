@@ -22,7 +22,7 @@ class RewindImageGenerationSerice{
     async generateSingleImage(data) {
       // const browser = getBrowser;
       const page = await global.browser.newPage();
-      // await page.setViewport({ width: 360, height: 600 });
+      // await page.setViewport({ width: 3840, height: 2160 });
 
       
       try{
@@ -43,7 +43,11 @@ class RewindImageGenerationSerice{
         // const snap = await card.screenshot({ path: "a.png", omitBackground: true });
         //snapsjot make it less quality
 
-        const snap = await card.screenshot({type: 'jpeg', quality: 100});
+        const snap = await card.screenshot({
+            type: 'png',
+            omitBackground: true,
+            scale: 5
+        });
         console.log('Time taken to take screenshot :: ',Date.now() - start2);
         return snap;
       }catch(e){
