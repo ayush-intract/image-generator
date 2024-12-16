@@ -2,6 +2,9 @@ const puppeteer = require('puppeteer');
 const express = require('express');
 const {Storage} = require('@google-cloud/storage');
 const routes = require('./routes/image-generate.route');
+const { preview } = require('vite');
+const path = require('path');
+const browserCheckMiddleware = require('./middleware/browserCheck.middleware');
 
 
 if(process.env.NODE_ENV === 'production') {
@@ -12,17 +15,7 @@ if(process.env.NODE_ENV === 'production') {
     require('dotenv').config({ path: '.env.development' });
 }
 
-// let browserInstance = null;
-// let browser;
 
-// const getBrowser = () => {return browserInstance;}
-// const setBrowser = (browser) => {
-//     if(!browserInstance) {
-//         browserInstance = browser;
-//     }
-//     return browserInstance;
-//     // browserInstance = browser;
-// };
 // Initialize browser on startup
 async function initBrowser() {
     browser = await puppeteer.launch({
@@ -46,9 +39,31 @@ const startServer = async () => {
             args: ['--no-sandbox']
         });
         console.log('Browser instance created');
+
+        // Start Vite preview server
+        await preview({
+            preview: {
+                port: 3001,
+                open: false
+            },
+            build: {
+                outDir: path.resolve(__dirname, './dist/puppeteer')  // Update this path to where your built files are
+            },
+            root: path.resolve(__dirname, './dist/puppeteer'),  // Update this path to where your built files are
+        });
+        
+        console.log(`Vite preview server started`);
+
         global['browser'] = browser;
         // setBrowser(browser);
         app.use(express.json());
+<<<<<<< HEAD
+=======
+        
+        // Add the browser check middleware before the routes
+        app.use(browserCheckMiddleware);
+        
+>>>>>>> origin/main
         app.use('/api/igv1',routes)
         app.listen(process.env.NODE_PORT, () => {
             console.info(`
@@ -59,7 +74,7 @@ const startServer = async () => {
         });
 		
 	} catch (err) {
-		console.error(err);
+		console.error('Server startup error:', err);
 	}
 };
 
@@ -75,6 +90,10 @@ const startServer = async () => {
 
 process.on('SIGINT', async () => {
     console.log('Caught SIGINT signal');
+    if (global.browser) {
+        await global.browser.close();
+        console.log('Browser closed');
+    }
     process.exit();
 });
 
