@@ -31,7 +31,7 @@ class RewindImageGenerationSerice{
     async generateSingleImage(data, generateProfileLink = false) {
       // const browser = getBrowser;
       const page = await global.browser.newPage();
-      // await page.setViewport({ width: 3840, height: 2160 });
+      await page.setViewport({ width: 2048, height: 1080 });
 
       
       try{
