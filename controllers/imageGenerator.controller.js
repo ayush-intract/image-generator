@@ -15,7 +15,7 @@ class ImageGenerator {
                     }
                     // Push the promise to the array
                     promises.push(rewindImageGenerationService.generateRewindService(stat).then(r => {
-                        return { metricType: stats[i].metricType, cardUrl:  r.publicUrl.replace('%2F', '/'), profileImageLink:  r.profileImageLink?.replace('%2F', '/') };
+                        return { metricType: stats[i].metricType, cardUrl:  r.publicUrl.replace('%2F', '/').replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz'), profileImageLink:  r.profileImageLink?.replace('%2F', '/').replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz') };
                     }));
                 }
             }
