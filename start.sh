@@ -2,7 +2,7 @@
 imageName=image-generator
 containerName=image-generator
 
-cp ../setup/.env.production ./.env.production
+cp .env.production ./.env.production
 #cp ../setup/.env.production ./.env.production
 docker build -t $imageName  . -f ./production.Dockerfile
 
@@ -11,6 +11,6 @@ docker build -t $imageName  . -f ./production.Dockerfile
 
 # echo Run new container...
 # sudo docker run -d -p 2229:1337 --name $containerName --restart unless-stopped $imageName
-docker compose up -d --force-recreate --build --scale $imageName=1
+docker compose up -d --force-recreate --build --scale $imageName=2
 # docker-compose up -d --scale transaction-credit-servicer=1
 
