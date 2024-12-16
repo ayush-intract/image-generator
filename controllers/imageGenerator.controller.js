@@ -7,15 +7,17 @@ class ImageGenerator {
             let a = Date.now();
             // Collect promises for parallel execution
             const promises = [];
+            console.log('INPUT ::',stats.length);
+            console.log(JSON.stringify(stats));
             for (let i = 0; i < stats.length; i++) {
-                if(["StreakLength","TotalWalletTransactionMetric","TotalGasSaved","DeveloperInfoMetric","TestnetTxnCount","MemecoinMetric","FavouriteChainMetric","TopNChains","FavouriteDappMetric","DayDistributionMetric","NftInfoMetric","DeveloperInfoMetric","TestnetTxnCount","RektCoinMetric","HodlCoinMetric","NftMint"].includes(stats[i].metricType)){
+                if(["StreakLength","TotalWalletTransactionMetric","TotalGasSaved","DeveloperInfoMetric","TestnetTxnCount","MemecoinMetric","FavouriteChainMetric","TopNChains","FavouriteDappMetric","DayDistributionMetric","NftInfoMetric","DeveloperInfoMetric","TestnetTxnCount","RektCoinMetric","HodlCoinMetric","NftMint", "NftCardMetric"].includes(stats[i].metricType)){
                     let stat = {
                         "cardType": stats[i].metricType,
                         "cardData": stats[i].metricData
                     }
                     // Push the promise to the array
                     promises.push(rewindImageGenerationService.generateRewindService(stat).then(r => {
-                        return { metricType: stats[i].metricType, cardUrl:  r.publicUrl.replace('%2F', '/') };
+                        return { metricType: stats[i].metricType, cardUrl:  r.publicUrl.replace('%2F', '/'), profileImageLink:  r.profileImageLink?.replace('%2F', '/') };
                     }));
                 }
             }
