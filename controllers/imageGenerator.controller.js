@@ -11,7 +11,8 @@ class ImageGenerator {
                 if(["StreakLength","TotalWalletTransactionMetric","TotalGasSaved","DeveloperInfoMetric","TestnetTxnCount","MemecoinMetric","FavouriteChainMetric","TopNChains","FavouriteDappMetric","DayDistributionMetric","NftInfoMetric","DeveloperInfoMetric","TestnetTxnCount","RektCoinMetric","HodlCoinMetric","NftMint", "NftCardMetric"].includes(stats[i].metricType)){
                     let stat = {
                         "cardType": stats[i].metricType,
-                        "cardData": stats[i].metricData
+                        "cardData": stats[i].metricData,
+                        "cardTheme": stats[i].theme || "superchain",
                     }
                     // Push the promise to the array
                     promises.push(rewindImageGenerationService.generateRewindService(stat).then(r => {

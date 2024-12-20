@@ -38,6 +38,7 @@ class RewindImageGenerationSerice{
         await page.evaluateOnNewDocument((cardType, cardData) => {
           window._asmMetricType = cardType;
           window._asmMetricData = cardData;
+          window._asmTheme = cardTheme;
         }, data.cardType, data.cardData);
 
         let start = Date.now(), start2;
