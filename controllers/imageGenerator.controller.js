@@ -8,10 +8,11 @@ class ImageGenerator {
             // Collect promises for parallel execution
             const promises = [];
             for (let i = 0; i < stats.length; i++) {
-                if(["StreakLength","TotalWalletTransactionMetric","TotalGasSaved","DeveloperInfoMetric","TestnetTxnCount","MemecoinMetric","FavouriteChainMetric","TopNChains","FavouriteDappMetric","DayDistributionMetric","NftInfoMetric","DeveloperInfoMetric","TestnetTxnCount","RektCoinMetric","HodlCoinMetric","NftMint", "NftCardMetric"].includes(stats[i].metricType)){
+                if(["StreakLength","TotalWalletTransactionMetric","TotalGasSaved","DeveloperInfoMetric","TestnetTxnCount","MemecoinMetric","FavouriteChainMetric","TopNChains","FavouriteDappMetric","DayDistributionMetric","NftInfoMetric","DeveloperInfoMetric","TestnetTxnCount","RektCoinMetric","HodlCoinMetric","NftMint", "NftCardMetric", "LxpMetric", "LxplMetric"].includes(stats[i].metricType)){
                     let stat = {
                         "cardType": stats[i].metricType,
-                        "cardData": stats[i].metricData
+                        "cardData": stats[i].metricData,
+                        "cardTheme": stats[i].theme || "superchain",
                     }
                     // Push the promise to the array
                     promises.push(rewindImageGenerationService.generateRewindService(stat).then(r => {
