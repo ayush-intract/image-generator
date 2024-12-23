@@ -35,11 +35,11 @@ class RewindImageGenerationSerice{
 
       
       try{
-        await page.evaluateOnNewDocument((cardType, cardData) => {
+        await page.evaluateOnNewDocument((cardType, cardData, cardTheme) => {
           window._asmMetricType = cardType;
           window._asmMetricData = cardData;
           window._asmTheme = cardTheme;
-        }, data.cardType, data.cardData);
+        }, data.cardType, data.cardData, data.cardTheme);
 
         let start = Date.now(), start2;
         await page.goto("http://localhost:3001", {
