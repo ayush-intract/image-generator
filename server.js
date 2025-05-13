@@ -5,6 +5,7 @@ const routes = require('./routes/image-generate.route');
 const { preview } = require('vite');
 const path = require('path');
 const browserCheckMiddleware = require('./middleware/browserCheck.middleware');
+const morgan = require('morgan');
 
 
 if(process.env.NODE_ENV === 'production') {
@@ -47,16 +48,21 @@ const startServer = async () => {
                 open: false
             },
             build: {
-                outDir: path.resolve(__dirname, './dist/puppeteer')  // Update this path to where your built files are
+                outDir: path.resolve(__dirname, '../wallet-infra/dist/apps/hex-badge-share')  // Update this path to where your built files are
             },
-            root: path.resolve(__dirname, './dist/puppeteer'),  // Update this path to where your built files are
+            root: path.resolve(__dirname, '../wallet-infra/dist/apps/hex-badge-share')  // Update this path to where your built files are
         });
         
         console.log(`Vite preview server started`);
 
+        const page = 
+        
         global['browser'] = browser;
         // setBrowser(browser);
         app.use(express.json());
+        
+        // Add Morgan middleware for request logging
+        app.use(morgan('dev'));
         
         // Add the browser check middleware before the routes
         app.use(browserCheckMiddleware);

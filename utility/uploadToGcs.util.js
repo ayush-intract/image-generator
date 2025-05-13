@@ -20,6 +20,13 @@ const uploadToGcs = async (buffer, filename) => {
     return file.publicUrl();
 }
 
+const uploadMetadataToGcs = async (metadata, filename) => {
+    const file = bucket.file(filename);
+    await file.save(metadata, {
+      contentType: 'application/json'
+    });
+    return file.publicUrl();
+}
 
 // async function uploadToGcs(buffer, filename) {
 //   const file = bucket.file(filename);
@@ -30,6 +37,7 @@ const uploadToGcs = async (buffer, filename) => {
 // }
 
 module.exports = {
-    uploadToGcs
+    uploadToGcs,
+    uploadMetadataToGcs
 }
 
