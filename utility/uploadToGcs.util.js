@@ -21,11 +21,18 @@ const uploadToGcs = async (buffer, filename) => {
 }
 
 const uploadMetadataToGcs = async (metadata, filename) => {
-    const file = bucket.file(filename);
-    await file.save(metadata, {
-      contentType: 'application/json'
-    });
-    return file.publicUrl();
+    try {
+      const file = bucket.file(filename);
+      const metadataString = JSON.stringify(metadata);
+      await file.save(metadataString, {
+        contentType: 'application/json'
+      });
+      return file.publicUrl();
+    } catch (error) {
+      console.error('Error uploading metadata to GCS:', error.message);
+      console.error('Error:', error);
+      throw error;
+    }
 }
 
 // async function uploadToGcs(buffer, filename) {
