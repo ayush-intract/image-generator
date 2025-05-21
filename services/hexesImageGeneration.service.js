@@ -11,37 +11,45 @@ class HexesImageGenerationService{
         const count = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
         // Generate all images in parallel
 
-        let publicUrl, metaDataUrl;
+        let hexBadgeFrontPublicUrl, hexBadgeBackPublicUrl, hexBadgeTwitterSharePublicUrl, nftMetaPublicUrl;
         if(data.hexBadgeFront) {
           const imageBuffer = await this.generateSingleImageFront(data);
           // const filename = `hexes2024/${data.projectName}_${uuid}.png`;
           const filename = data?.hexBadgeFront?.filePath;
-          publicUrl = await uploadToGcs(imageBuffer, filename);
+          hexBadgeFrontPublicUrl = await uploadToGcs(imageBuffer, filename);
         }
         if(data.hexBadgeBack) {
           const imageBuffer = await this.generateSingleImageBack(data);
           // const filename = `hexes2024/${data.hexId}_${data.userId}_${uuid}.png`;
           const filename = data?.hexBadgeBack?.filePath;
-          publicUrl = await uploadToGcs(imageBuffer, filename);
+          hexBadgeBackPublicUrl = await uploadToGcs(imageBuffer, filename);
         }
 
         if(data.hexBadgeTwitterShare) {
           const imageBuffer = await this.generateSingleImageTwitterShare(data);
           // const filename = `hexes2024/${data.projectName}_${uuid}.png`;
           const filename = data?.hexBadgeTwitterShare?.filePath;
-          publicUrl = await uploadToGcs(imageBuffer, filename);
+          hexBadgeTwitterSharePublicUrl = await uploadToGcs(imageBuffer, filename);
         }
 
         if(data.nftMeta) {
           // const fileName = `hexes2024/${data.hexId}_${data.userId}_${uuid}`;
           const fileName = data?.nftMeta?.filePath;
+          delete data.nftMeta.filePath;
           const metadata = await uploadMetadataToGcs(data.nftMeta, fileName);
-          metaDataUrl = metadata;
+          nftMetaPublicUrl = metadata;
         }
 
+        // console.log('hexBadgeFrontPublicUrl :: ',hexBadgeFrontPublicUrl);
+        // console.log('hexBadgeBackPublicUrl :: ',hexBadgeBackPublicUrl);
+        // console.log('hexBadgeTwitterSharePublicUrl :: ',hexBadgeTwitterSharePublicUrl);
+        // console.log('nftMetaPublicUrl :: ',nftMetaPublicUrl);
+
         return {
-            publicUrl,
-            metaDataUrl
+            hexBadgeFrontPublicUrl,
+            hexBadgeBackPublicUrl,
+            hexBadgeTwitterSharePublicUrl,
+            nftMetaPublicUrl
         }
     }
 

@@ -24,9 +24,12 @@ class HexesImageGenerator {
                 // }
                 // Push the promise to the array
                 promises.push(hexesImageGenerationService.generateHexesService(data[i]).then(r => {
+                    // console.log('r :: ',r);
                     return { 
-                        publicUrl:  r?.publicUrl?.replace('%2F', '/')?.replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz'),
-                        metaDataUrl: r?.metaDataUrl?.replace('%2F', '/')?.replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz')
+                        hexBadgeFrontPublicUrl:  r?.hexBadgeFrontPublicUrl?.replace('%2F', '/')?.replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz'),
+                        hexBadgeBackPublicUrl: r?.hexBadgeBackPublicUrl?.replace('%2F', '/')?.replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz'),
+                        hexBadgeTwitterSharePublicUrl: r?.hexBadgeTwitterSharePublicUrl?.replace('%2F', '/')?.replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz'),
+                        nftMetaPublicUrl: r?.nftMetaPublicUrl?.replace('%2F', '/')?.replace('storage.googleapis.com/static.highongrowth.xyz', 'static.highongrowth.xyz')
                      };
                 }));
             }

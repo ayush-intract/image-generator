@@ -13,6 +13,7 @@ const bucketName = process.env.GCS_BUCKET_NAME || 'static.highongrowth.xyz';
 const bucket = storage.bucket(bucketName);
 
 const uploadToGcs = async (buffer, filename) => {
+    // console.log('filename :: ',filename);
     const file = bucket.file(filename);
     await file.save(buffer, {
       contentType: 'image/png'
