@@ -47,9 +47,9 @@ const startServer = async () => {
                 open: false
             },
             build: {
-                outDir: path.resolve(__dirname, './dist/puppeteer')  // Update this path to where your built files are
+                outDir: path.resolve(__dirname, './dist/bantr')  // Update this path to where your built files are
             },
-            root: path.resolve(__dirname, './dist/puppeteer'),  // Update this path to where your built files are
+            root: path.resolve(__dirname, './dist/bantr'),  // Update this path to where your built files are
         });
         
         console.log(`Vite preview server started`);
