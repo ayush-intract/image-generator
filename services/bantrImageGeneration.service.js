@@ -38,7 +38,7 @@ class BantrImageGenerationSerice{
       const page = await global.browser.newPage();
       await page.setViewport({ width: 2048, height: 1080 });
 
-      console.log('data :: ',data);
+      console.log('data :: ',JSON.stringify(data));
       console.log('imageSelector :: ',imageSelector);
       console.log('templateType :: ',templateType);
       try{
