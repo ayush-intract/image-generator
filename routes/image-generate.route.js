@@ -15,6 +15,8 @@ router.post('/generate-bantr-image', bantrImageGeneratorInstance.generatorBantrI
 
 router.post('/generate-v1', imageGeneratorInstance.generatorImage.bind(imageGeneratorInstance)); 
 
+router.post('/generate-bantr-rewind', imageGeneratorInstance.generatorImage.bind(imageGeneratorInstance)); 
+
 router.post('/tweet-generate', tweetImageGeneratorInstance.generatorTweetImage.bind(tweetImageGeneratorInstance));
 
 module.exports = router;
