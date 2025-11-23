@@ -8,7 +8,8 @@ const BantrRewindImageTypeEnum = {
     HighestTweetEngagementMetric : 'HighestTweetEngagementMetric',
     UserTierMetric : 'UserTierMetric',
     ViralTweetMetric : 'ViralTweetMetric',
-    TopEngagedKolsMetric : 'TopEngagedKolsMetric'
+    TopEngagedKolsMetric : 'TopEngagedKolsMetric',
+    NftCardMetric : 'NftCardMetric'
 }
 
 module.exports = {

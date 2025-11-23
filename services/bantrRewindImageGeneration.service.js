@@ -15,6 +15,7 @@ class BantrRewindImageGenerationSerice{
         const filename = `rewindBantr2024/${data.cardType}_${uuidv4()}.png`;
         const publicUrl = await uploadToGcs(imageBuffer, filename);
 
+        console.log("DEBUG publicUrl :: ", publicUrl);
         return {
             publicUrl,
         }
