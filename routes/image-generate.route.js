@@ -4,6 +4,7 @@ const router = Router();
 const { imageGeneratorInstance } = require('../controllers/imageGenerator.controller');
 const { tweetImageGeneratorInstance } = require('../controllers/tweetImageGenerator.controller');
 const { bantrImageGeneratorInstance } = require('../controllers/bantrGenerator.controller');
+const { bantrRewindImageGeneratorInstance } = require('../controllers/bantrRewindImageGenerator.controller');
 
 router.get('/', async (req, res) => {
     return res.json({
@@ -15,7 +16,7 @@ router.post('/generate-bantr-image', bantrImageGeneratorInstance.generatorBantrI
 
 router.post('/generate-v1', imageGeneratorInstance.generatorImage.bind(imageGeneratorInstance)); 
 
-router.post('/generate-bantr-rewind', imageGeneratorInstance.generatorImage.bind(imageGeneratorInstance)); 
+router.post('/generate-bantr-rewind', bantrRewindImageGeneratorInstance.generatorImage.bind(bantrRewindImageGeneratorInstance)); 
 
 router.post('/tweet-generate', tweetImageGeneratorInstance.generatorTweetImage.bind(tweetImageGeneratorInstance));
 
