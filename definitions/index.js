@@ -1,6 +1,7 @@
 const BantrRewindImageTypeEnum = {
     TotalWalletTransactionMetric : 'TotalWalletTransactionMetric',
     DayDistributionMetric : 'DayDistributionMetric',
+    MonthDistributionMetric : 'MonthDistributionMetric',
     FavouriteDappMetric:'FavouriteDappMetric',
     TopTradedTokens : 'TopTradedTokens',
     TotalBaseTweetMetric:'TotalBaseTweetMetric',
