@@ -31,7 +31,8 @@ class BantrRewindImageGenerator {
             // Wait for all promises to resolve
             const response = await Promise.all(promises);
             console.log('response time :: ',Date.now() - a);
-            
+
+            console.log("response :: ", JSON.stringify(response));
             res.json({
                 success: true,
                 images: response
