@@ -9,7 +9,8 @@ const storage = new Storage({
 });
 
 // const bucketName = 'static.highongrowth.xyz';
-const bucketName = process.env.GCS_BUCKET_NAME;
+const bucketName = "intract-test-storage";
+// process.env.GCS_BUCKET_NAME;
 //  || 'static.highongrowth.xyz';
 const bucket = storage.bucket(bucketName);
 
