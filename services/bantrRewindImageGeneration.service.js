@@ -12,7 +12,7 @@ class BantrRewindImageGenerationSerice{
 
         // console.log('Data INPUT :: ',JSON.stringify(data));
         const imageBuffer = await this.generateSingleImage(data);
-        const filename = `rewindBantr2024/${data.cardType}_${uuidv4()}.png`;
+        const filename = `rewindBantr2025/${data.cardType}_${uuidv4()}.png`;
         const publicUrl = await uploadToGcs(imageBuffer, filename);
 
         console.log("DEBUG publicUrl :: ", publicUrl);
