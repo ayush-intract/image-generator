@@ -10,10 +10,12 @@ class BantrRewindImageGenerationSerice{
     async generateRewindService(data) {
         // Generate all images in parallel
 
+        // console.log('Data INPUT :: ',JSON.stringify(data));
         const imageBuffer = await this.generateSingleImage(data);
         const filename = `rewindBantr2024/${data.cardType}_${uuidv4()}.png`;
         const publicUrl = await uploadToGcs(imageBuffer, filename);
 
+        console.log("DEBUG publicUrl :: ", publicUrl);
         return {
             publicUrl,
         }
@@ -25,6 +27,7 @@ class BantrRewindImageGenerationSerice{
       await page.setViewport({ width: 2048, height: 1080 });
 
       try{
+        console.log("DEBUG :: ", data.cardType, data.cardData, data.cardTheme);
         await page.evaluateOnNewDocument((cardType, cardData, cardTheme) => {
           window._asmMetricType = cardType;
           window._asmMetricData = cardData;
@@ -43,7 +46,7 @@ class BantrRewindImageGenerationSerice{
 
       
           let start1 = Date.now();
-          const cardWrapper = await page.waitForSelector('#contrast-wrapper');
+          const cardWrapper = await page.waitForSelector('#bantr-rewind-card');
           console.log('Time taken to load card :: ',Date.now() - start1);
 
           start2 = Date.now();

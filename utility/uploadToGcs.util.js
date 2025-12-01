@@ -10,6 +10,7 @@ const storage = new Storage({
 
 // const bucketName = 'static.highongrowth.xyz';
 const bucketName = process.env.GCS_BUCKET_NAME || 'static.highongrowth.xyz';
+// 'intract-test-storage' // change to static.highongrowth.xyz for production
 const bucket = storage.bucket(bucketName);
 
 const uploadToGcs = async (buffer, filename) => {

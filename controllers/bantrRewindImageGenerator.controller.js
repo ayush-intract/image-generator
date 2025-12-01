@@ -1,7 +1,7 @@
-const { BantrRewindImageTypeEnum } = require('../definitions');
+const { BantrRewindImageTypeEnum } = require('../definitions/index.js');
 const bantrRewindImageGenerationService = require('../services/bantrRewindImageGeneration.service');
 
-class ImageGenerator {
+class BantrRewindImageGenerator {
     async generatorImage(req, res) {
         try {
             const stats = req.body;
@@ -31,7 +31,8 @@ class ImageGenerator {
             // Wait for all promises to resolve
             const response = await Promise.all(promises);
             console.log('response time :: ',Date.now() - a);
-            
+
+            console.log("response :: ", JSON.stringify(response));
             res.json({
                 success: true,
                 images: response
@@ -43,10 +44,10 @@ class ImageGenerator {
     }
 }
 
-const imageGeneratorInstance = new ImageGenerator();
+const bantrRewindImageGeneratorInstance = new BantrRewindImageGenerator();
 
 module.exports = {
-    imageGeneratorInstance
+    bantrRewindImageGeneratorInstance
 }
 
 
